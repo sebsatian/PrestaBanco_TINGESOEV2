@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: simulation-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8888
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/simulation_db
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
