@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="eureka-service" />
+        <module name="totalcost-service" />
+        <module name="config-server" />
+        <module name="register-service" />
+        <module name="evaluation-service" />
+        <module name="gateway-service" />
+        <module name="request-service" />
+        <module name="simulation-service" />
+        <module name="tracking-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="config-server" options="-parameters" />
+      <module name="eureka-service" options="-parameters" />
+      <module name="evaluation-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
+      <module name="register-service" options="-parameters" />
+      <module name="request-service" options="-parameters" />
+      <module name="simulation-service" options="-parameters" />
+      <module name="totalcost-service" options="-parameters" />
+      <module name="tracking-service" options="-parameters" />
+    </option>
+  </component>
+</project>
