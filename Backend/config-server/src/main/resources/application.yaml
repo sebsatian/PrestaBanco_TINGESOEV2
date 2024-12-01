@@ -6,9 +6,8 @@ spring:
     config:
       server:
         git:
-          default-label: main
           uri: https://github.com/sebsatian/PrestaBanco_TINGESOEV2
+          default-label: main
           search-paths: config-data
-
   application:
-    name: config-service
+    name: config-server
