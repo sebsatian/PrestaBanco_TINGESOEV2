@@ -25,5 +25,21 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    public ClientEntity getClientByRut(String rut) {
+        return clientRepository.findClientByRut(rut);
+    }
+
+    public Long getClientIdByRut(String rut) {
+        return clientRepository.findClientByRut(rut).getId();
+    }
+
+    public ClientEntity getClientById(Long id) {
+        return clientRepository.findById(id).orElse(null);
+    }
+
+    public String getRutById(Long id) {
+        return clientRepository.getClientRutById(id);
+    }
+
 
 }

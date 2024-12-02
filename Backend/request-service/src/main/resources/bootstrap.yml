@@ -1,4 +1,4 @@
-pring:
+spring:
   application:
     name: request-service
   cloud:
@@ -15,3 +15,5 @@ pring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect

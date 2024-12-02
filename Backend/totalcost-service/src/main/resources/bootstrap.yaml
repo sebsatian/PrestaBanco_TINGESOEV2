@@ -1,6 +1,6 @@
 spring:
   application:
-    name: totalcost-service
+    name: totalcosts-service
   cloud:
     config:
       enabled: true
@@ -15,3 +15,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect

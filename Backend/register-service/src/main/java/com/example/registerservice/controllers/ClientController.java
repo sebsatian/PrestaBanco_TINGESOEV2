@@ -29,4 +29,53 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/{rut}")
+    public ResponseEntity<?> getClientByRut(String rut){
+        try {
+            ClientEntity client = clientService.getClientByRut(rut);
+            return ResponseEntity.ok(client);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getClientById(Long id){
+        try {
+            ClientEntity client = clientService.getClientById(id);
+            return ResponseEntity.ok(client);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
+    @GetMapping("/getIdByRut/{rut}")
+    public ResponseEntity<?> getIdByRut(@PathVariable String rut){
+        try {
+            Long id = clientService.getClientIdByRut(rut);
+            return ResponseEntity.ok(id);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
+    @GetMapping("/getRutById/{id}")
+    public ResponseEntity<?> getRutById(@PathVariable Long id){
+        try {
+            String rut = clientService.getRutById(id);
+            return ResponseEntity.ok(rut);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
+
 }
