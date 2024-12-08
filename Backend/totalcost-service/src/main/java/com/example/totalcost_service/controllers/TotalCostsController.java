@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/total-costs")
-@CrossOrigin("*")
 public class TotalCostsController {
 
     @Autowired

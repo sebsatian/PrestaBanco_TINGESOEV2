@@ -16,7 +16,7 @@ function MainPage() {
           <button className="action-button">Registrar Cliente</button>
         </Link>
         <Link to="/simulate">
-          <button className="action-button">Simular un crédito y Pedir Préstamoo</button>
+          <button className="action-button">Simular un crédito y Pedir Préstamo</button>
         </Link>
         <Link to="/loan-types/view">
           <button className="action-button">Tasa de interés Anual</button>

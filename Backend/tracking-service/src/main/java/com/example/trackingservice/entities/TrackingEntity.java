@@ -17,7 +17,10 @@ public class TrackingEntity {
     private Long id;
 
     @Column(name = "request_id")
-    private int requestId;
+    private Long requestId;
+
+    @Column(name = "type")
+    private String type;
 
     @Column(name = "client_rut")
     private String clientRut;

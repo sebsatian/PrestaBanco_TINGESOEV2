@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/client")
-@CrossOrigin("*")
 public class ClientController {
 
     @Autowired
@@ -29,8 +28,8 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/{rut}")
-    public ResponseEntity<?> getClientByRut(String rut){
+    @GetMapping("/getByRut/{rut}")
+    public ResponseEntity<?> getClientByRut(@PathVariable String rut) {
         try {
             ClientEntity client = clientService.getClientByRut(rut);
             return ResponseEntity.ok(client);
@@ -41,8 +40,8 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getClientById(Long id){
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<?> getClientById(@PathVariable Long id){
         try {
             ClientEntity client = clientService.getClientById(id);
             return ResponseEntity.ok(client);

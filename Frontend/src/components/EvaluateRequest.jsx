@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import requestService from '../services/request.service.js';
+import trackingService from '../services/tracking.service.js';
 import evaluationService from '../services/evaluation.service.js';
 import { Modal, Button, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -122,7 +123,7 @@ const EvaluateRequest = () => {
       console.log('Evaluación creada exitosamente:', response.data);
   
       await requestService.updateRequestStatus(id, 'En Evaluación');
-  
+      await trackingService.updateTracking(id, 'En Evaluación');
       alert('Evaluación creada exitosamente.');
       navigate(`/evaluation/${id}`); 
   

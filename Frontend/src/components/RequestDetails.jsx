@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import requestService from '../services/request.service.js';
+import trackingService from '../services/tracking.service.js';
 import loanTypeService from '../services/loantype.service.js';
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -70,6 +71,7 @@ const RequestDetails = () => {
     try {
       console.log('Cancelling request:', id);
       await requestService.updateRequestStatus(id, 'Cancelada por el Cliente');
+      await trackingService.updateTracking(id, 'Cancelada por el Cliente');
       alert('La solicitud ha sido cancelada.');
       navigate('/'); // Redirige a la página principal
     } catch (error) {
@@ -107,7 +109,7 @@ const RequestDetails = () => {
       <div className="request-details" style={{ width: showViewer ? '40%' : '40%' }}>
         <div className="d-flex justify-content-end">
           <Button variant="danger" onClick={handleCancelRequest} className="mb-3">
-            Cancelar Solicitud Chile!
+            Cancelar Solicitud
           </Button>
         </div>
         <h2>Detalles de la Solicitud</h2>

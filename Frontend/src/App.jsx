@@ -13,6 +13,7 @@ import CheckRequestStatus from './components/CheckRequestStatus';
 import EvaluateRequest from './components/EvaluateRequest';
 import EvaluationDetails from './components/EvaluationDetails';
 import SavingCapacity from './components/SavingCapacity';
+import TrackRequests from './components/TrackRequests';
 import Layout from './components/Layout'; 
 import TotalCosts from './components/TotalCosts'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -37,7 +38,7 @@ function App() {
         <Route path="/evaluation/:id" element={<Layout content={<EvaluationDetails />} />} />
         <Route path="/saving-capacity/:id" element={<Layout content={<SavingCapacity/>} />} />
         <Route path="/total-costs/:id" element={<Layout content={<TotalCosts />} />} /> 
-        
+        <Route path="/track-requests/" element={<Layout content={<TrackRequests />} />} />
       </Routes>
     </Router>
   );

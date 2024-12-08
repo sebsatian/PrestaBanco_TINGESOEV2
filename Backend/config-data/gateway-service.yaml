@@ -24,11 +24,11 @@ spring:
         - id: request-service
           uri: lb://request-service
           predicates:
-            - Path=/requests/**
+            - Path=/requests/**,/firsthomereq/**,/secondhomereq/**,/businessreq/**,/remodelingreq/**
         - id: simulation-service
           uri: lb://simulation-service
           predicates:
-            - Path=/simulation/**
+            - Path=/simulation/**,/loan-types/**
         - id: evaluation-service
           uri: lb://evaluation-service
           predicates:
@@ -40,4 +40,4 @@ spring:
         - id: totalcosts-service
           uri: lb://totalcosts-service
           predicates:
-            - Path=/totalcosts/**
+            - Path=/total-costs/**

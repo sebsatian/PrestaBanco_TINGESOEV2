@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/evaluation")
-@CrossOrigin("*")
 public class EvaluationController {
     @Autowired
     private EvaluationService evaluationService;
@@ -67,6 +66,6 @@ public class EvaluationController {
     // Get the evaluation by request id
     @GetMapping("/{id}")
     public EvaluationEntity getEvaluationByRequestId(@PathVariable Long id) {
-        return evaluationRepository.findByRequestId(id).orElse(null);
+        return evaluationService.getByRequestId(id).orElse(null);
     }
 }

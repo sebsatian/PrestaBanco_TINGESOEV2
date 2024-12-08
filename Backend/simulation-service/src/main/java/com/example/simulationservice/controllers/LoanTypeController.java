@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/loan-types")
-@CrossOrigin("*")
 public class LoanTypeController {
 
     @Autowired
@@ -37,7 +36,7 @@ public class LoanTypeController {
     }
 
     // Endpoint to get all loan types
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> getAllLoanTypes() {
         try {
             List<LoanTypeEntity> loanTypes = loanTypeService.getAllLoanTypes();

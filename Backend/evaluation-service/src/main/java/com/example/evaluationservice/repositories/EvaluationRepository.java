@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface EvaluationRepository extends JpaRepository<EvaluationEntity, Long> {
-    Optional <EvaluationEntity> findByRequestId(Long requestId);
+    Optional<EvaluationEntity> findByRequestId(Long requestId);
 
 }

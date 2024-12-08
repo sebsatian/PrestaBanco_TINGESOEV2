@@ -4,9 +4,13 @@ import com.example.simulationservice.models.ClientEntity;
 import com.example.simulationservice.entities.SimulationEntity;
 import com.example.simulationservice.repositories.LoanTypeRepository;
 import com.example.simulationservice.repositories.SimulationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -15,6 +19,7 @@ import java.util.Optional;
 @Service
 public class SimulationService {
 
+    private static final Logger log = LoggerFactory.getLogger(SimulationService.class);
     @Autowired
     private RestTemplate restTemplate;
 
@@ -115,14 +120,33 @@ public class SimulationService {
     }
 
     public ClientEntity getClientByRut(String rut) {
-        ClientEntity client = restTemplate.getForObject("http://localhost:8080/client/" + rut, ClientEntity.class);
-
-        return client;
+        try {
+            return restTemplate.getForObject("http://localhost:8080/client/getByRut/" + rut, ClientEntity.class);
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            // Manejar errores HTTP específicos
+            System.err.println("Error al obtener el cliente: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+            throw new RuntimeException("Error al obtener el cliente: " + e.getMessage());
+        } catch (Exception e) {
+            // Manejar otros errores
+            System.err.println("Error inesperado al obtener el cliente: " + e.getMessage());
+            throw new RuntimeException("Error inesperado al obtener el cliente: " + e.getMessage());
+        }
     }
 
-    public ClientEntity getClientById(Long id){
-        ClientEntity client = restTemplate.getForObject("http://localhost:8080/client/" + id, ClientEntity.class);
-        return client;
+    public ClientEntity getClientById(Long id) {
+        try {
+            ClientEntity client = restTemplate.getForObject("http://localhost:8080/client/getById/" + id, ClientEntity.class);
+            System.out.println("Client: " + client);
+            return client;
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            // Manejar errores HTTP específicos
+            System.err.println("Error al obtener el cliente: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+            throw new RuntimeException("Error al obtener el cliente: " + e.getMessage());
+        } catch (Exception e) {
+            // Manejar otros errores
+            System.err.println("Error inesperado al obtener el cliente: " + e.getMessage());
+            throw new RuntimeException("Error inesperado al obtener el cliente: " + e.getMessage());
+        }
     }
 
     public Optional<SimulationEntity> findByClientId(Long clientId){

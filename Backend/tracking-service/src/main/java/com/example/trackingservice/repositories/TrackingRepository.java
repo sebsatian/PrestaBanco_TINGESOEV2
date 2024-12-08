@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface TrackingRepository extends JpaRepository<TrackingEntity, Long> {
 
-    List<TrackingEntity> getByClientRut(String client_rut);
+    List<TrackingEntity> getByClientRut(String clientRut);
 
     TrackingEntity getTrackingByRequestId(Long request_id);
 

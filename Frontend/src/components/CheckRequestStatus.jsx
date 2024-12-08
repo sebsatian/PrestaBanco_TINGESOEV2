@@ -27,7 +27,7 @@ const CheckRequestStatus = () => {
       return;
     }
     console.log('Navigating to /view-requests with RUT:', rut);
-    navigate('/view-requests', { state: { rut } });
+    navigate('/track-requests', { state: { rut } });
   };
 
   return (

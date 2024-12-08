@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import requestService from '../services/request.service';
+import trackingService from '../services/tracking.service';
 import loanTypeService from '../services/loantype.service';
 import { Modal, Button, Form } from 'react-bootstrap';
 
@@ -52,6 +53,7 @@ const TotalCosts = () => {
     try {
       await requestService.updateRequestDetails(id, approveDetails);
       await requestService.updateRequestStatus(id, 'Pre-Aprobada');
+      await trackingService.updateTracking(id, 'Pre-Aprobada');
       setShowApproveModal(false);
       alert('Estado de la solicitud actualizado a Pre-Aprobada');
     } catch (error) {

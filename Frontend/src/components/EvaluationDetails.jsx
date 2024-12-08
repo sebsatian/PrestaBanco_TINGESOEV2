@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 import evaluationService from '../services/evaluation.service.js';
+import trackingService from '../services/tracking.service.js';
 import requestService from '../services/request.service.js';
 import '../styles/EvaluationDetails.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -48,6 +49,7 @@ const EvaluationDetails = () => {
     try {
       await requestService.updateRequestDetails(id, rejectDetails);
       await requestService.updateRequestStatus(id, 'Rechazada');
+      await trackingService.updateTracking(id, 'Rechazada');
       setShowRejectModal(false);
       alert('El estado se actualizó correctamente.');
       navigate('/'); 

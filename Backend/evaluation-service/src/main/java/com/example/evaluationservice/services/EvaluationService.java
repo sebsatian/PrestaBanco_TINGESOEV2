@@ -7,6 +7,8 @@ import com.example.evaluationservice.repositories.EvaluationRepository;
 import com.example.evaluationservice.models.ClientEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -42,7 +44,7 @@ public class EvaluationService {
         // Verify if the request exists
         int requestId = Math.toIntExact(request.getId());
         // Verify if the evaluation already exists
-        Optional<EvaluationEntity> evaluationOpt = findByRequestId(request.getId());
+        Optional<EvaluationEntity> evaluationOpt = getByRequestId(request.getId());
 
         EvaluationEntity evaluation;
         if (evaluationOpt.isPresent()) {
@@ -140,17 +142,25 @@ public class EvaluationService {
     }
 
     public RequestEntity getRequestById(Long id) {
-        RequestEntity request =  restTemplate.getForObject("http://localhost:8080/requests/" + id, RequestEntity.class);
-        return request;
+        return restTemplate.getForObject("http://localhost:8080/requests/" + id, RequestEntity.class);
     }
 
     public ClientEntity getClientByRut(String rut) {
-        ClientEntity client = restTemplate.getForObject("http://localhost:8080/client/" + rut, ClientEntity.class);
-
-        return client;
+        try {
+            return restTemplate.getForObject("http://localhost:8080/client/getByRut/" + rut, ClientEntity.class);
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            // Manejar errores HTTP específicos
+            System.err.println("Error al obtener el cliente: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+            throw new RuntimeException("Error al obtener el cliente: " + e.getMessage());
+        } catch (Exception e) {
+            // Manejar otros errores
+            System.err.println("Error inesperado al obtener el cliente: " + e.getMessage());
+            throw new RuntimeException("Error inesperado al obtener el cliente: " + e.getMessage());
+        }
     }
 
-    public Optional<EvaluationEntity> findByRequestId(Long id) {
-        return evaluationRepository.findByRequestId(id);
+    public Optional<EvaluationEntity> getByRequestId(Long requestId) {
+        return evaluationRepository.findByRequestId(requestId);
     }
+
 }

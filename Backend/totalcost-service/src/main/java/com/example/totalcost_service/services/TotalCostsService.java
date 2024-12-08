@@ -79,7 +79,6 @@ public class TotalCostsService {
     }
 
     public RequestEntity getRequestById(Long id) {
-        RequestEntity request =  restTemplate.getForObject("http://localhost:8080/requests/" + id, RequestEntity.class);
-        return request;
+        return restTemplate.getForObject("http://localhost:8080/requests/" + id, RequestEntity.class);
     }
 }

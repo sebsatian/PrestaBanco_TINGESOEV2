@@ -4,6 +4,7 @@ import com.example.simulationservice.models.ClientEntity;
 import com.example.simulationservice.entities.SimulationEntity;
 import com.example.simulationservice.services.SimulationService;
 
+import com.sun.jdi.LongValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/simulation")
-@CrossOrigin("*")
 public class SimulationController {
 
     @Autowired
@@ -96,9 +96,10 @@ public class SimulationController {
     public ResponseEntity<?> getSimulationById(@PathVariable Long simulationId) {
         try {
             SimulationEntity simulation = simulationService.getSimulationEntityById(simulationId);
-            // Create a response map with the simulation and the client's RUT
-            int clientId = simulation.getClientId();
-            ClientEntity client = simulationService.getClientById((long) clientId);
+            // Create a response map with the simulation and the client's RUT, in Long
+            Long clientId = (long) simulation.getClientId();
+            System.out.println("Client ID: " + clientId);
+            ClientEntity client = simulationService.getClientById(clientId);
             String rut = client.getRut();
 
             Map<String, Object> response = new HashMap<>();
@@ -109,6 +110,7 @@ public class SimulationController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace(); // Print the exception for debugging
             return ResponseEntity.status(500).body("An unexpected error occurred");
         }
     }
@@ -176,4 +178,6 @@ public class SimulationController {
             return ResponseEntity.status(500).body("An unexpected error occurred");
         }
     }
+
+
 }

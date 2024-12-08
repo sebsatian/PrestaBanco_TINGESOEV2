@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/businessreq")
-@CrossOrigin("*")
 public class BusinessReqController {
     @Autowired
     private BusinessReqService businessReqService;

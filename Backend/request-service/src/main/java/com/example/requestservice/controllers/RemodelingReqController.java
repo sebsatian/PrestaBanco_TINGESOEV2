@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/remodelingreq")
-@CrossOrigin("*")
 public class RemodelingReqController {
     @Autowired
     private RemodelingReqService remodelingReqService;

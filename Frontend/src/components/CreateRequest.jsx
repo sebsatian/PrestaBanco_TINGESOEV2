@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import http from '../http-common'; 
+import trackingService from '../services/tracking.service.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const CreateRequest = () => {
@@ -118,7 +119,14 @@ const CreateRequest = () => {
       }
 
       if (response && response.status === 200) {
-        navigate('/view-requests'); // Redirect to the requests view
+        const requestId = response.data.id;
+        const clientRut = response.data.clientRut;
+        const type = loanTypeName;
+
+        // Create tracking request
+        await trackingService.createTracking(requestId, clientRut, type);
+
+        navigate(`/request-details/${requestId}`, { state: { requestId } });
       } else {
         setError('Hubo un error al enviar la solicitud. Por favor, inténtalo de nuevo.');
       }

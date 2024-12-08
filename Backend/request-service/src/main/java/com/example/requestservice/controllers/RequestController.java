@@ -3,6 +3,8 @@ package com.example.requestservice.controllers;
 import com.example.requestservice.entities.RequestEntity;
 import com.example.requestservice.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/requests")
-@CrossOrigin("*")
 public class    RequestController {
     @Autowired
     private RequestRepository requestRepository;
@@ -31,23 +32,29 @@ public class    RequestController {
     }
 
     @GetMapping("/{id}")
-    public RequestEntity getRequestById(@PathVariable Long id) {
-        RequestEntity request = requestRepository.findById(id).orElse(null);
-        if (request == null) {
-            return null;
-        }
+    public ResponseEntity<?> getRequestById(@PathVariable Long id) {
+        try {
+            RequestEntity request = requestRepository.findById(id).orElse(null);
+            if (request == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Request not found with ID: " + id);
+            }
 
-        switch (request.getLoanType()) {
-            case 1:
-                return firstHomeReqRepository.findById(id).orElse(null);
-            case 2:
-                return secondHomeReqRepository.findById(id).orElse(null);
-            case 3:
-                return businessReqRepository.findById(id).orElse(null);
-            case 4:
-                return remodelingReqRepository.findById(id).orElse(null);
-            default:
-                return request;
+            switch (request.getLoanType()) {
+                case 1:
+                    return ResponseEntity.ok(firstHomeReqRepository.findById(id).orElse(null));
+                case 2:
+                    return ResponseEntity.ok(secondHomeReqRepository.findById(id).orElse(null));
+                case 3:
+                    return ResponseEntity.ok(businessReqRepository.findById(id).orElse(null));
+                case 4:
+                    return ResponseEntity.ok(remodelingReqRepository.findById(id).orElse(null));
+                default:
+                    return ResponseEntity.ok(request);
+            }
+        } catch (Exception e) {
+            // Manejar otros errores
+            System.err.println("Error inesperado al obtener la solicitud: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
         }
     }
 
@@ -71,6 +78,7 @@ public class    RequestController {
         if (requestEntityOptional.isPresent()) {
             RequestEntity request = requestEntityOptional.get();
             request.setCurrentStatus(statusUpdate.get("statusUpdate"));
+
             requestRepository.save(request);
         } else {
             System.out.println("Request not found");

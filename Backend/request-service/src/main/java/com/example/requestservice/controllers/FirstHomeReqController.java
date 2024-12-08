@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/firsthomereq")
-@CrossOrigin("*")
 public class FirstHomeReqController {
     @Autowired
     private FirstHomeReqService firstHomeReqService;

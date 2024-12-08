@@ -2,7 +2,7 @@
 import httpClient from '../http-common';
 
 const getAllLoanTypes = () => {
-  return httpClient.get('/loan-types');
+  return httpClient.get('/loan-types/all');
 };
 
 const getLoanTypeById = (loanTypeId) => {

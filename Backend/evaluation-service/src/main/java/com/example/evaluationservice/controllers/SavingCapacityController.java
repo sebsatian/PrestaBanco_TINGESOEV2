@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/saving-capacity")
-@CrossOrigin("*")
 public class SavingCapacityController {
 
     @Autowired
