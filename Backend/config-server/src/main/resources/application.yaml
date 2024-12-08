@@ -1,12 +1,13 @@
 server:
   port: 8888
+
 spring:
+  profiles:
+    active: native
   cloud:
     config:
       server:
-        git:
-          default-label: main
-          uri: https://github.com/sebsatian/PrestaBanco_TINGESOEV2/
-          search-paths: config-data
+        native:
+          search-locations: file:///C:/Users/seba/Desktop/PrestaBanco_TINGESOEV2/Backend/config-data
   application:
     name: config-server
