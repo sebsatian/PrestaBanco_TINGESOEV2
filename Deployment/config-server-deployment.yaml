@@ -23,9 +23,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: config-server-service
+  name: config-server
   labels:
-    app: config-server-service
+    app: config-server
 spec:
   selector:
     app: config-server-deployment

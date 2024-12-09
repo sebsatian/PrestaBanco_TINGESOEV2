@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evaluation-service
+  labels:
+    app: evaluation-service-deployment
+spec:
+  selector:
+    matchLabels:
+      app: evaluation-service-pod
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: evaluation-service-pod
+    spec:
+      containers:
+        - name: evaluation-service
+          image: sebsatian/evaluation-service
+          env:
+            - name: SERVER_PORT
+              value: "0"
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-map
+                  key: DB_HOST_EVALUATION
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-map
+                  key: DB_PORT
+            - name: DB_DBNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-map
+                  key: DB_DBNAME_EVALUATION
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_USER_EVALUATION
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_PASSWORD_EVALUATION
+            - name: CONFIG_SERVER_HOST
+              value: "config-server"
+            - name: EUREKA_HOST
+              value: "eureka-server"
+            - name: EUREKA_PORT
+              value: "8761"
+            - name: INSTANCE_HOSTNAME
+              value: evaluation-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: evaluation-service
+  labels:
+    app: evaluation-service-deployment
+spec:
+  clusterIP: None
+  selector:
+    app: evaluation-service-pod
+  ports:
+    - protocol: TCP
+      port: 8080 # Puerto dummy para no afectar puertos dinámicos
+      targetPort: 8080

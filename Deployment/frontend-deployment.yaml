@@ -2,29 +2,33 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
+  labels:
+    app: frontend-deployment
 spec:
-  replicas: 3
   selector:
     matchLabels:
-      app: frontend
+      app: frontend-deployment
+  replicas: 1
   template:
     metadata:
       labels:
-        app: frontend
+        app: frontend-deployment
     spec:
       containers:
-      - name: frontend
-        image: tu-usuario/frontend:latest
-        ports:
-        - containerPort: 80
+        - name: frontend
+          image: sebsatian/frontend
+          ports:
+          - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: frontend-deployment
+  labels:
+    app: frontend-deployment
 spec:
   selector:
-    app: frontend
+    app: frontend-deployment
   ports:
     - protocol: TCP
       port: 80
