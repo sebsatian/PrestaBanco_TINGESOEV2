@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: db-register-pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 512Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/db-register-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-register-pvc
+  labels:
+    app: postgres
+    tier: database
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-register
+  labels:
+    app: db-register-deployment
+    tier: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-register-pod
+  template:
+    metadata:
+      labels:
+        app: db-register-pod
+        tier: database
+    spec:
+      containers:
+        - name: db-register
+          image: postgres:16
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_USER_REGISTER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_PASSWORD_REGISTER             
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-register-data
+            - mountPath: /docker-entrypoint-initdb.d
+              name: init-scripts
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - |
+                    export PGPASSWORD="$POSTGRES_PASSWORD"
+                    until pg_isready -U "$POSTGRES_USER" -h "localhost"; do
+                      echo "$(date): Esperando a que PostgreSQL esté listo..."
+                      sleep 2
+                    done
+                    psql -U "$POSTGRES_USER" -h localhost -d postgres -f /docker-entrypoint-initdb.d/init.sql || true
+      volumes:
+        - name: db-register-data
+          persistentVolumeClaim:
+            claimName: db-register-pvc
+        - name: init-scripts
+          configMap:
+            name: prestabanco-register-init-scripts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-register-service
+  labels:
+    app: db-register-service
+    tier: database
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: db-register-pod
+    tier: database
+  type: LoadBalancer
