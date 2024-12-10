@@ -1,31 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: gateway-service-deployment
+  labels:
+    app: gateway-service-deployment
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: gateway-service-pod
+  replicas: 1
   template:
     metadata:
       labels:
-        app: frontend
+        app: gateway-service-pod
     spec:
       containers:
-        - name: frontend
-          image: sebsatian/frontend
+        - name: gateway-service
+          image: sebsatian/gateway-service
           ports:
-            - containerPort: 80
+            - containerPort: 8080
+          env:
+            - name: CONFIG_SERVER_HOST
+              value: "config-service"
+            - name: EUREKA_HOST
+              value: "eureka-service"
+            - name: EUREKA_PORT
+              value: "8761"
+            - name: INSTANCE_HOSTNAME
+              value: "gateway-service"
+            - name: SERVER_PORT
+              value: "8082"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "gateway-service"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: gateway-service-service
+  labels:
+    app: gateway-service-service
 spec:
+  selector:
+    app: gateway-service-pod
   type: LoadBalancer
   ports:
-    - port: 80         
-      targetPort: 80    
-  selector:
-    app: frontend
+    - port: 8080
+      targetPort: 8080
