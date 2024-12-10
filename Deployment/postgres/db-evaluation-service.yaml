@@ -68,19 +68,7 @@ spec:
               name: db-evaluation-data
             - mountPath: /docker-entrypoint-initdb.d
               name: init-scripts
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - sh
-                  - -c
-                  - |
-                    export PGPASSWORD="$POSTGRES_PASSWORD"
-                    until pg_isready -U "$POSTGRES_USER" -h "localhost"; do
-                      echo "$(date): Esperando a que PostgreSQL esté listo..."
-                      sleep 2
-                    done
-                    psql -U "$POSTGRES_USER" -h localhost -d postgres -f /docker-entrypoint-initdb.d/init.sql || true
+          
       volumes:
         - name: db-evaluation-data
           persistentVolumeClaim:

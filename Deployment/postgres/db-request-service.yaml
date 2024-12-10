@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: db-totalcost-pv
+  name: db-request-pv
   labels:
     type: local
 spec:
@@ -11,12 +11,12 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data/db-totalcost-data"
+    path: "/data/db-request-data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: db-totalcost-pvc
+  name: db-request-pvc
   labels:
     app: postgres
     tier: database
@@ -31,23 +31,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-totalcost
+  name: db-request
   labels:
-    app: db-totalcost-deployment
+    app: db-request-deployment
     tier: database
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: db-totalcost-pod
+      app: db-request-pod
   template:
     metadata:
       labels:
-        app: db-totalcost-pod
+        app: db-request-pod
         tier: database
     spec:
       containers:
-        - name: db-totalcost
+        - name: db-request
           image: postgres:16
           imagePullPolicy: "IfNotPresent"
           ports:
@@ -57,44 +57,32 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-credentials
-                  key: DB_USER_TOTALCOST
+                  key: DB_USER_REQUEST
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-credentials
-                  key: DB_PASSWORD_TOTALCOST             
+                  key: DB_PASSWORD_REQUEST             
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-totalcost-data
+              name: db-request-data
             - mountPath: /docker-entrypoint-initdb.d
               name: init-scripts
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - sh
-                  - -c
-                  - |
-                    export PGPASSWORD="$POSTGRES_PASSWORD"
-                    until pg_isready -U "$POSTGRES_USER" -h "localhost"; do
-                      echo "$(date): Esperando a que PostgreSQL esté listo..."
-                      sleep 2
-                    done
-                    psql -U "$POSTGRES_USER" -h localhost -d postgres -f /docker-entrypoint-initdb.d/init.sql || true
+          
       volumes:
-        - name: db-totalcost-data
+        - name: db-request-data
           persistentVolumeClaim:
-            claimName: db-totalcost-pvc
+            claimName: db-request-pvc
         - name: init-scripts
           configMap:
-            name: prestabanco-totalcost-init-scripts
+            name: prestabanco-request-init-scripts
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-totalcost-service
+  name: db-request-service
   labels:
-    app: db-totalcost-service
+    app: db-request-service
     tier: database
 spec:
   ports:
@@ -102,6 +90,6 @@ spec:
       targetPort: 5432
       protocol: TCP
   selector:
-    app: db-totalcost-pod
+    app: db-request-pod
     tier: database
   type: LoadBalancer

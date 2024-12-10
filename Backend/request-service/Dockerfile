@@ -7,5 +7,5 @@ RUN mvn clean package -DskipTests
 # Etapa final
 FROM openjdk:17
 WORKDIR /app
-COPY --from=build /app/target/*.jar simulation-service.jar
-ENTRYPOINT ["java","-jar","/app/simulation-service.jar"]
+COPY --from=build /app/target/*.jar request-service.jar
+ENTRYPOINT ["java","-jar","/app/request-service.jar"]

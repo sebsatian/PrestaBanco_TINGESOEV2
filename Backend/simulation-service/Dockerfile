@@ -1,4 +1,11 @@
+# Etapa de construcción
+FROM maven:3.8.4-openjdk-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Etapa final
 FROM openjdk:17
-ARG JAR_FILE=./target/*.jar
-COPY ${JAR_FILE} simulation-service.jar
-ENTRYPOINT ["java","-jar","/simulation-service.jar"]
+WORKDIR /app
+COPY --from=build /app/target/*.jar simulation-service.jar
+ENTRYPOINT ["java","-jar","/app/simulation-service.jar"]
