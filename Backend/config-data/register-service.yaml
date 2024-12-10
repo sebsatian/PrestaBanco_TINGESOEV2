@@ -21,3 +21,9 @@ eureka:
     instance:
       instance-id: ${spring.application.name}:${server.port}
       hostname: ${HOSTNAME}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
