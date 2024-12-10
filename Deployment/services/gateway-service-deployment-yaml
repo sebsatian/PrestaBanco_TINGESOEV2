@@ -36,9 +36,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gateway-service-service
+  name: gateway-service
   labels:
-    app: gateway-service-service
+    app: gateway-service
 spec:
   selector:
     app: gateway-service-pod

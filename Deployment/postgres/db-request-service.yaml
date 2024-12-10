@@ -47,7 +47,7 @@ spec:
         tier: database
     spec:
       containers:
-        - name: db-request
+        - name: postgres
           image: postgres:16
           imagePullPolicy: "IfNotPresent"
           ports:
@@ -66,16 +66,10 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: db-request-data
-            - mountPath: /docker-entrypoint-initdb.d
-              name: init-scripts
-          
       volumes:
         - name: db-request-data
           persistentVolumeClaim:
             claimName: db-request-pvc
-        - name: init-scripts
-          configMap:
-            name: prestabanco-request-init-scripts
 ---
 apiVersion: v1
 kind: Service
