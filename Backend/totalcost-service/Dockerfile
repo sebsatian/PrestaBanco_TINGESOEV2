@@ -1,4 +1,11 @@
+# Etapa de construcción
+FROM maven:3.8.4-openjdk-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Etapa final
 FROM openjdk:17
-ARG JAR_FILE=./target/*.jar
-COPY ${JAR_FILE} totalcost-service.jar
-ENTRYPOINT ["java","-jar","/totalcost-service.jar"]
+WORKDIR /app
+COPY --from=build /app/target/*.jar totalcost-service.jar
+ENTRYPOINT ["java","-jar","/app/totalcost-service.jar"]

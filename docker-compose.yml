@@ -1,0 +1,60 @@
+services:
+  config-server:
+    build:
+      context: ./Backend/config-server
+      dockerfile: Dockerfile
+    image: sebsatian/config-server:latest
+
+  eureka-server:
+    build:
+      context: ./Backend/eureka-server
+      dockerfile: Dockerfile
+    image: sebsatian/eureka-server:latest
+
+  gateway-service:
+    build:
+      context: ./Backend/gateway-service
+      dockerfile: Dockerfile
+    image: sebsatian/gateway-service:latest
+
+  register-service:
+    build:
+      context: ./Backend/register-service
+      dockerfile: Dockerfile
+    image: sebsatian/register-service:latest
+
+  request-service:
+    build:
+      context: ./Backend/request-service
+      dockerfile: Dockerfile
+    image: sebsatian/request-service:latest
+
+  simulation-service:
+    build:
+      context: ./Backend/simulation-service
+      dockerfile: Dockerfile
+    image: sebsatian/simulation-service:latest
+
+  totalcost-service:
+    build:
+      context: ./Backend/totalcost-service
+      dockerfile: Dockerfile
+    image: sebsatian/totalcost-service:latest
+
+  tracking-service:
+    build:
+      context: ./Backend/tracking-service
+      dockerfile: Dockerfile
+    image: sebsatian/tracking-service:latest
+
+  evaluation-service:
+    build:
+      context: ./Backend/evaluation-service
+      dockerfile: Dockerfile
+    image: sebsatian/evaluation-service:latest
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    image: sebsatian/frontend:latest

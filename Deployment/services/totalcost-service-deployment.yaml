@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simulation-service
+  name: totalcost-service
   labels:
-    app: simulation-service-deployment
+    app: totalcost-service-deployment
 spec:
   selector:
     matchLabels:
-      app: simulation-service-pod
+      app: totalcost-service-pod
   replicas: 1
   template:
     metadata:
       labels:
-        app: simulation-service-pod
+        app: totalcost-service-pod
     spec:
       containers:
-        - name: simulation-service
-          image: sebsatian/simulation-service
+        - name: totalcost-service
+          image: sebsatian/totalcost-service
           env:
             - name: SERVER_PORT
               value: "0"
@@ -24,7 +24,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_HOST_SIMULATION
+                  key: DB_HOST_TOTALCOST
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
@@ -34,17 +34,17 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config-map
-                  key: DB_DBNAME_SIMULATION
+                  key: DB_DBNAME_TOTALCOST
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: postgres-credentials
-                  key: DB_USER_SIMULATION
+                  key: DB_USER_TOTALCOST
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-credentials
-                  key: DB_PASSWORD_SIMULATION
+                  key: DB_PASSWORD_TOTALCOST
             - name: CONFIG_SERVER_HOST
               value: "config-server"
             - name: EUREKA_HOST
@@ -52,18 +52,18 @@ spec:
             - name: EUREKA_PORT
               value: "8761"
             - name: INSTANCE_HOSTNAME
-              value: simulation-service
+              value: totalcost-service
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: simulation-service
+  name: totalcost-service
   labels:
-    app: simulation-service-deployment
+    app: totalcost-service-deployment
 spec:
   clusterIP: None
   selector:
-    app: simulation-service-pod
+    app: totalcost-service-pod
   ports:
     - protocol: TCP
       port: 8080 # Puerto dummy para no afectar puertos dinámicos
