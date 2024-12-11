@@ -1,0 +1,34 @@
+kubectl apply -f .\postgres-config-map.yaml
+kubectl apply -f .\postgres-secrets.yaml
+cd .\postgres\
+kubectl apply -f .\db-register-service.yaml
+kubectl apply -f .\db-simulation-service.yaml
+kubectl apply -f .\db-request-service.yaml
+kubectl apply -f .\db-evaluation-service.yaml
+kubectl apply -f .\db-totalcost-service.yaml
+kubectl apply -f .\db-tracking-service.yaml
+cd ..
+cd .\services\
+kubectl apply -f .\config-server-deployment.yaml
+kubectl apply -f .\eureka-server-deployment.yaml
+kubectl apply -f .\gateway-service-deployment-yaml
+kubectl apply -f .\register-service-deployment.yaml
+kubectl apply -f .\simulation-service-deployment.yaml
+kubectl apply -f .\request-service-deployment.yaml
+kubectl apply -f .\evaluation-service-deployment.yaml
+kubectl apply -f .\totalcost-service-deployment.yaml
+kubectl apply -f .\tracking-service-deployment.yaml
+kubectl apply -f .\frontend-deployment.yaml
+
+kubectl delete -f .\config-server-deployment.yaml
+kubectl delete -f .\eureka-server-deployment.yaml
+kubectl delete -f .\gateway-service-deployment-yaml
+kubectl delete -f .\register-service-deployment.yaml
+kubectl delete -f .\simulation-service-deployment.yaml
+kubectl delete -f .\request-service-deployment.yaml
+kubectl delete -f .\evaluation-service-deployment.yaml
+kubectl delete -f .\totalcost-service-deployment.yaml
+kubectl delete -f .\tracking-service-deployment.yaml
+kubectl delete -f .\frontend-deployment.yaml
+
+kubectl exec -it db-tracking-749bfddf4b-hqtb7 -- psql -U postgres -c "\l"
