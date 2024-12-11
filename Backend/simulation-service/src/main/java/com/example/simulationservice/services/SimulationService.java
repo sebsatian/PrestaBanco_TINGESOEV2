@@ -121,7 +121,7 @@ public class SimulationService {
 
     public ClientEntity getClientByRut(String rut) {
         try {
-            return restTemplate.getForObject("http://localhost:8080/client/getByRut/" + rut, ClientEntity.class);
+            return restTemplate.getForObject("http://gateway-service:8080/client/getByRut/" + rut, ClientEntity.class);
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             // Manejar errores HTTP específicos
             System.err.println("Error al obtener el cliente: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
@@ -135,7 +135,7 @@ public class SimulationService {
 
     public ClientEntity getClientById(Long id) {
         try {
-            ClientEntity client = restTemplate.getForObject("http://localhost:8080/client/getById/" + id, ClientEntity.class);
+            ClientEntity client = restTemplate.getForObject("http://gateway-service:8080/client/getById/" + id, ClientEntity.class);
             System.out.println("Client: " + client);
             return client;
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -161,7 +161,7 @@ public class SimulationService {
 
     public Long getClientIdByRut(String rut){
 
-        Long clientId = restTemplate.getForObject("http://localhost:8080/getIdByRut/{rut}", Long.class, rut);
+        Long clientId = restTemplate.getForObject("http://gateway-service:8080/getIdByRut/{rut}", Long.class, rut);
         return clientId;
     }
 
@@ -171,7 +171,7 @@ public class SimulationService {
     }
 
     public String getRutByClientId(Long clientId){
-        return restTemplate.getForObject("http://localhost:8080/getRutById/{clientId}", String.class, clientId);
+        return restTemplate.getForObject("http://gateway-service:8080/getRutById/{clientId}", String.class, clientId);
     }
 
 

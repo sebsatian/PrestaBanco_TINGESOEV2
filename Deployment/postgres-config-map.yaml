@@ -19,6 +19,7 @@ data:
   DB_DBNAME_TOTALCOST: totalcost_db
   DB_PORT: "5432"
 ---
+# Creation and insertion of loan types
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -27,13 +28,11 @@ data:
   init.sql: |
     DO $$
     BEGIN
-        -- Verificar si la tabla 'loan_types' existe
         IF NOT EXISTS (
             SELECT 1 
             FROM information_schema.tables 
             WHERE table_name = 'loan_types'
         ) THEN
-            -- Crear la tabla
             CREATE TABLE loan_types (
                 id SERIAL PRIMARY KEY,
                 type VARCHAR(255) NOT NULL,
@@ -43,8 +42,6 @@ data:
                 max_interest_rate DECIMAL(5, 2) NOT NULL,
                 annual_interest_rate DECIMAL(5, 2) NOT NULL
             );
-
-            -- Poblar la tabla con datos iniciales
             INSERT INTO loan_types (type, maximum_term, max_finance, min_interest_rate, max_interest_rate, annual_interest_rate)
             VALUES
             ('Primera Vivienda', 30, 0.80, 3.5, 5.0, 5.0),
