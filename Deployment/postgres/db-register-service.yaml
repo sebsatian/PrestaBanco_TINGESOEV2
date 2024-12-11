@@ -69,7 +69,7 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ["/bin/sh", "-c", "until pg_isready -U $POSTGRES_USER -h localhost; do echo \"$(date): Esperando a que PostgreSQL esté listo...\"; sleep 2; done; psql -U $POSTGRES_USER -h localhost -tc \"SELECT 1 FROM pg_database WHERE datname = 'register_db'\" | grep -q 1 || psql -U $POSTGRES_USER -h localhost -c \"CREATE DATABASE register_db;\""]
+                command: ["/bin/sh", "-c", "until pg_isready -U $POSTGRES_USER -h localhost; do echo \"$(date): Initializing\"; sleep 2; done; psql -U $POSTGRES_USER -h localhost -tc \"SELECT 1 FROM pg_database WHERE datname = 'register_db'\" | grep -q 1 || psql -U $POSTGRES_USER -h localhost -c \"CREATE DATABASE register_db;\""]
       volumes:
         - name: db-register-data
           persistentVolumeClaim:
