@@ -62,14 +62,23 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-credentials
-                  key: DB_PASSWORD_TOTALCOST             
+                  key: DB_PASSWORD_TOTALCOST
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: db-totalcost-data
+            - mountPath: /docker-entrypoint-initdb.d
+              name: init-scripts
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "until pg_isready -U $POSTGRES_USER -h localhost; do echo \"$(date): Esperando a que PostgreSQL esté listo...\"; sleep 2; done; psql -U $POSTGRES_USER -h localhost -f /docker-entrypoint-initdb.d/init.sql"]
       volumes:
         - name: db-totalcost-data
           persistentVolumeClaim:
             claimName: db-totalcost-pvc
+        - name: init-scripts
+          configMap:
+            name: totalcost-init-scripts
 ---
 apiVersion: v1
 kind: Service

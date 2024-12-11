@@ -22,47 +22,27 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: register-init-scripts
-data:
-  init.sql: |
-    SELECT 'CREATE DATABASE register_db' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'register_db')\gexec
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: simulation-init-scripts
-data:
-  init.sql: |
-    SELECT 'CREATE DATABASE simulation_db' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'simulation_db')\gexec
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: request-init-scripts
-data:
-  init.sql: |
-    SELECT 'CREATE DATABASE request_db' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'request_db')\gexec
----    
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: evaluation-init-scripts
-data:
-  init.sql: |
-    SELECT 'CREATE DATABASE evaluation_db' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'evaluation_db')\gexec
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: tracking-init-scripts
-data:
-  init.sql: |
-    SELECT 'CREATE DATABASE tracking_db' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'tracking_db')\gexec
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
   name: totalcost-init-scripts
 data:
   init.sql: |
-    SELECT 'CREATE DATABASE totalcost_db' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'totalcost_db')\gexec 
+    DO $$
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'loan_types') THEN
+            CREATE TABLE loan_types (
+                id SERIAL PRIMARY KEY,
+                type VARCHAR(255) NOT NULL,
+                maximum_term INT NOT NULL,
+                max_finance DECIMAL(5, 2) NOT NULL,
+                min_interest_rate DECIMAL(5, 2) NOT NULL,
+                max_interest_rate DECIMAL(5, 2) NOT NULL,
+                annual_interest_rate DECIMAL(5, 2) NOT NULL
+            );
+
+            INSERT INTO loan_types (id, type, maximum_term, max_finance, min_interest_rate, max_interest_rate, annual_interest_rate)
+            VALUES
+            (1, 'Primera Vivienda', 30, 0.80, 3.5, 5.0, 5.0),
+            (2, 'Segunda Vivienda', 20, 0.70, 4.0, 6.0, 6.0),
+            (3, 'Propiedades Comerciales', 25, 0.60, 5.0, 7.0, 7.0),
+            (4, 'Remodelación', 15, 0.50, 4.5, 6.0, 6.0);
+        END IF;
+    END $$;
