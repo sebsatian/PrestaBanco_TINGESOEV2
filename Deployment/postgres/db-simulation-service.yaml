@@ -72,18 +72,21 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: >
-                  /bin/sh -c "
-                  until pg_isready -U $POSTGRES_USER -h localhost; do echo \"$(date): Waiting for database\"; sleep 2; done;
-                  echo \"Checking and creating database...\";
-                  psql -U $POSTGRES_USER -h localhost -tc \"SELECT 1 FROM pg_database WHERE datname = 'simulation_db'\" | grep -q 1 ||
-                  psql -U $POSTGRES_USER -h localhost -c \"CREATE DATABASE simulation_db;\";
-                  echo \"Enabling dblink extension...\";
-                  psql -U $POSTGRES_USER -h localhost -d simulation_db -c \"CREATE EXTENSION IF NOT EXISTS dblink;\";
-                  echo \"Running initialization script...\";
-                  psql -U $POSTGRES_USER -h localhost -d simulation_db -f /docker-entrypoint-initdb.d/init.sql;
-                  echo \"Initialization completed.\";
-                  "
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - |
+                    until pg_isready -U $POSTGRES_USER -h localhost; do
+                      echo "$(date): Waiting for database";
+                      sleep 2;
+                    done;
+                    echo "Checking and creating database...";
+                    psql -U $POSTGRES_USER -h localhost -tc "SELECT 1 FROM pg_database WHERE datname = 'simulation_db'" | grep -q 1 || psql -U $POSTGRES_USER -h localhost -c "CREATE DATABASE simulation_db";
+                    echo "Enabling dblink extension...";
+                    psql -U $POSTGRES_USER -h localhost -d simulation_db -c "CREATE EXTENSION IF NOT EXISTS dblink";
+                    echo "Running initialization script...";
+                    psql -U $POSTGRES_USER -h localhost -d simulation_db -f /docker-entrypoint-initdb.d/init.sql;
+                    echo "Initialization completed.";
       volumes:
         - name: db-simulation-data
           persistentVolumeClaim:
@@ -91,6 +94,7 @@ spec:
         - name: simulation-init-scripts-volume
           configMap:
             name: simulation-init-scripts
+
 
 ---
 apiVersion: v1

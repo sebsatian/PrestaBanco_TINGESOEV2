@@ -142,12 +142,12 @@ public class EvaluationService {
     }
 
     public RequestEntity getRequestById(Long id) {
-        return restTemplate.getForObject("http://localhost:8080/requests/" + id, RequestEntity.class);
+        return restTemplate.getForObject("http://gateway-service:8080/requests/" + id, RequestEntity.class);
     }
 
     public ClientEntity getClientByRut(String rut) {
         try {
-            return restTemplate.getForObject("http://localhost:8080/client/getByRut/" + rut, ClientEntity.class);
+            return restTemplate.getForObject("http://gateway-service:8080/client/getByRut/" + rut, ClientEntity.class);
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             // Manejar errores HTTP específicos
             System.err.println("Error al obtener el cliente: " + e.getStatusCode() + " " + e.getResponseBodyAsString());

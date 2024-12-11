@@ -14,7 +14,7 @@ public class RequestService {
 
     public ClientEntity getClientByRut(String rut) {
         try {
-            ClientEntity client = restTemplate.getForObject("http://localhost:8080/client/getByRut/" + rut, ClientEntity.class);
+            ClientEntity client = restTemplate.getForObject("http://gateway-service:8080/client/getByRut/" + rut, ClientEntity.class);
             return client;
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             // Manejar errores HTTP específicos
@@ -29,7 +29,7 @@ public class RequestService {
 
     public String getClientRutById(Long id) {
         try {
-            String rut = restTemplate.getForObject("http://localhost:8080/client/getRutById/" + id, String.class);
+            String rut = restTemplate.getForObject("http://gateway-service:8080/client/getRutById/" + id, String.class);
             return rut;
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             // Manejar errores HTTP específicos

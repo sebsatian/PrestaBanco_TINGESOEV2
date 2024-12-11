@@ -79,6 +79,6 @@ public class TotalCostsService {
     }
 
     public RequestEntity getRequestById(Long id) {
-        return restTemplate.getForObject("http://localhost:8080/requests/" + id, RequestEntity.class);
+        return restTemplate.getForObject("http://gateway-service:8080/requests/" + id, RequestEntity.class);
     }
 }
