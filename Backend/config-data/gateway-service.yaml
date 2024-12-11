@@ -10,7 +10,7 @@ eureka:
       hostname: localhost
 spring:
   application:
-    name: gateway-service
+    name: localhost
   cloud:
     gateway:
       discovery:
